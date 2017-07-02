@@ -50,6 +50,9 @@ class MainActivity : AppCompatActivity(), ImageFragment.OnImageLoadedListener {
             hexcode_text.setTextColor(vibrantSwatch.bodyTextColor)
             hexcode_text.text = "$vibrantSwatch"
 
+            toolbar.setTitleTextColor(vibrantSwatch.bodyTextColor)
+            toolbar.setBackgroundColor(vibrantSwatch.rgb)
+
             animateText()
             return@PaletteAsyncListener
         }
@@ -60,6 +63,8 @@ class MainActivity : AppCompatActivity(), ImageFragment.OnImageLoadedListener {
             window.statusBarColor = darkSwatch.rgb
             hexcode_text.setTextColor(darkSwatch.bodyTextColor)
             hexcode_text.text = "$darkSwatch"
+            toolbar.setTitleTextColor(darkSwatch.bodyTextColor)
+            toolbar.setBackgroundColor(darkSwatch.rgb)
             animateText()
             return@PaletteAsyncListener
         }
@@ -135,6 +140,10 @@ class MainActivity : AppCompatActivity(), ImageFragment.OnImageLoadedListener {
                 window.statusBarColor = ContextCompat.getColor(this, R.color.colorAccent)
 
                 hexcode_text.visibility = View.GONE
+
+                toolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                toolbar.setTitleTextColor(ContextCompat.getColor(this, android.R.color.primary_text_light))
+
             }
 
         }
@@ -179,8 +188,8 @@ class MainActivity : AppCompatActivity(), ImageFragment.OnImageLoadedListener {
         }
     }
 
-    private fun changeFragment(uri: Uri) {
 
+    private fun changeFragment(uri: Uri) {
         // send the image for generate palette async
         createNewPalette(uri)
 
