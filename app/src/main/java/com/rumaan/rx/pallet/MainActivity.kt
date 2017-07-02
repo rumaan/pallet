@@ -16,11 +16,12 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
-
 
 class MainActivity : AppCompatActivity(), ImageFragment.OnImageLoadedListener {
     override fun onImageLoaded() {
@@ -31,7 +32,6 @@ class MainActivity : AppCompatActivity(), ImageFragment.OnImageLoadedListener {
         close_btn.animation = anim
         close_btn.visibility = View.VISIBLE
     }
-
 
     val REQUEST_IMG = 4
     val REQUEST_PERMISSION = 5
@@ -64,9 +64,8 @@ class MainActivity : AppCompatActivity(), ImageFragment.OnImageLoadedListener {
             return@PaletteAsyncListener
         }
 
-        hexcode_text.text = "Could'nt get the hexcode please try again!"
+        hexcode_text.text = getString(R.string.palette_error)
         animateText()
-
     })
 
     private fun animateText() {
@@ -82,9 +81,25 @@ class MainActivity : AppCompatActivity(), ImageFragment.OnImageLoadedListener {
         finish()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when {
+            item?.itemId == R.id.menu_about -> {
+                startActivity(Intent(this, AboutActivity::class.java))
+            }
+        }
+        return true
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(toolbar)
+
         typeface = Typeface.createFromAsset(assets, "fonts/oswald_medium.ttf")
 
         choose_image.setOnClickListener {
@@ -95,7 +110,6 @@ class MainActivity : AppCompatActivity(), ImageFragment.OnImageLoadedListener {
                                 "Please close the current image to choose a new one.",
                                 Snackbar.LENGTH_SHORT)
                         .show()
-
             } else {
                 requestImage()
             }
@@ -144,10 +158,6 @@ class MainActivity : AppCompatActivity(), ImageFragment.OnImageLoadedListener {
     }
 
     private fun getImage() {
-        /*val takePicIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (takePicIntent.resolveActivity(packageManager) != null) {
-            startActivityForResult(takePicIntent, REQUEST_IMG)
-        }*/
         val pickImageIntent = Intent()
         pickImageIntent.type = "image/*"
         pickImageIntent.action = Intent.ACTION_GET_CONTENT
